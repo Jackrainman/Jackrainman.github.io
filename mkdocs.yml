@@ -1,7 +1,7 @@
 site_name: Web_of_Jackrainman
 site_description: Jackrainman 文档站
-site_url: 
-repo_url: 
+site_url:
+repo_url:
 edit_uri: edit/main/docs/
 
 theme:
@@ -61,6 +61,25 @@ plugins:
 
 extra:
   generator: false
+
+  extra:
+  generator: false
+  # --- 新增 giscus 配置 ---
+  comments:
+    provider: giscus
+    options:
+      repo: Jackrainman/Jackrainman.github.io
+      repo_id: DIC_kwDOQ9R6kc4C1xkk
+      category: Announcements
+      category_id: DIC_kwD...         # 填入你在 giscus.app 查到的 ID
+      mapping: pathname
+      strict: "0"
+      reactions_enabled: "1"
+      emit_metadata: "0"
+      input_position: bottom
+      theme: preferred_color_scheme   # 自动跟随你配置的亮/暗模式
+      lang: zh-CN
+      loading: lazy
 
 markdown_extensions:
   - pymdownx.arithmatex:
