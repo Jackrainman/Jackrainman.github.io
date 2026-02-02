@@ -6,31 +6,39 @@ on:
       - main
   pull_request:
 
+# 必须添加这个权限块，否则 GitHub Actions 无法发布网页
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-      
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-      
+          # 确保 requirements.txt 里写了 mkdocs-material
+
       - name: Build site
         run: mkdocs build
-      
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+
+      # --- 以下是针对你截图设置的正确部署方式 ---
+      - name: Upload artifact
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
-        env:
-          http_proxy: ""
-          https_proxy: ""
-          no_proxy: ""
+          path: ./site
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: deployment
+        uses: actions/deploy-pages@v4
