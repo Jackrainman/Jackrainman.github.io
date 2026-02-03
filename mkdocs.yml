@@ -119,3 +119,8 @@ nav:
   - Home: index.md
   - About:
       - About: About/index.md
+  - 电控:
+      - 基础知识: zh/ControlTheory/Control-Theory-Fundamentals.md
+      - PID控制: zh/ControlTheory/PID-Control.md
+      - LADRC: zh/ControlTheory/LADRC.md
+      - 高级控制: zh/ControlTheory/Advanced-Control-Theory.md
