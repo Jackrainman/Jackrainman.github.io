@@ -61,9 +61,6 @@ plugins:
 
 extra:
   generator: false
-
-  extra:
-  generator: false
   # --- 新增 giscus 配置 ---
   comments:
     provider: giscus
@@ -109,8 +106,8 @@ markdown_extensions:
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js
   - javascripts/mathjax.js
-  - https://polyfill.io/v3/polyfill.min.js?features=es6
-  - javascripts/tex-mml-chtml.js
+  - https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js
 
 extra_css:
   - stylesheets/extra.css
@@ -120,7 +117,12 @@ nav:
   - About:
       - About: About/index.md
   - 电控:
-      - 基础知识: zh/ControlTheory/Control-Theory-Fundamentals.md
-      - PID控制: zh/ControlTheory/PID-Control.md
-      - LADRC: zh/ControlTheory/LADRC.md
-      - 高级控制: zh/ControlTheory/Advanced-Control-Theory.md
+      - CAN总线:
+          - CAN总线基础: zh/CAN/CAN总线基础.md
+          - CAN报文列表: zh/CAN/CAN_List.md
+          - CAN报文代码: zh/CAN/CAN_List代码.md
+      - 控制论:
+          - 基础知识: zh/ControlTheory/Control-Theory-Fundamentals.md
+          - PID控制: zh/ControlTheory/PID-Control.md
+          - LADRC: zh/ControlTheory/LADRC.md
+          - 高级控制: zh/ControlTheory/Advanced-Control-Theory.md
