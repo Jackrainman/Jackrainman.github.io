@@ -124,5 +124,8 @@ nav:
       - 控制论:
           - 基础知识: zh/ControlTheory/Control-Theory-Fundamentals.md
           - PID控制: zh/ControlTheory/PID-Control.md
-          - LADRC: zh/ControlTheory/LADRC.md
-          - 高级控制: zh/ControlTheory/Advanced-Control-Theory.md
+      - LADRC: zh/ControlTheory/LADRC.md
+      - 自抗扰控制:
+          - 知识点前瞻: zh/ControlTheory/何谓自抗扰_知识点前瞻.md
+          - 何谓自抗扰: zh/ControlTheory/何谓自抗扰.md
+      - 高级控制: zh/ControlTheory/Advanced-Control-Theory.md
