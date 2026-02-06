@@ -13,10 +13,10 @@ PID（Proportional-Integral-Derivative）控制算法是目前工程领域应用
 其核心控制公式如下：
 
 $$
-u(t) = K_p e(t) + K_i \int_{0}^{t} e(\tau) d\tau
+u(t) = K_p e(t) + K_i \int_{0}^{t} e(\tau) d\tau + K_d \frac{de(t)}{dt}
 $$
 
-其中  为输出量（如电机电流）， 为误差（目标值减去当前值）。
+其中 $u(t)$ 为输出量（如电机电流），$e(t)$ 为误差（目标值减去当前值）。
 
 ## 核心三要素
 
