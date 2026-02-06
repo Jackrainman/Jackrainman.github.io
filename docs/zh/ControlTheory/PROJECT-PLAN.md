@@ -411,9 +411,112 @@ Layer 4: 进阶拓展
 
 ---
 
-## 开始执行
+## 附录：图片插入工作流
 
-请按顺序执行以上步骤，每完成一步后更新此文档的状态标记。
+### 一、判断标准：什么时候需要图片？
+
+| 场景 | 需要图片 | 不需要图片 |
+|------|----------|------------|
+| 复杂系统结构 | ✅ LADRC整体框图、TD/LESO/LSEF关系 | 单一公式解释 |
+| 流程/时序 | ✅ 信号流向、控制流程 | 简单步骤说明 |
+| 对比展示 | ✅ PID vs LADRC、并联对比 | 参数表格对比 |
+| 公式推导 | ❌ 推导过程用文字+公式即可 | - |
+| 曲线/波形 | ✅ 阶跃响应、扰动响应曲线 | 静态数值 |
+| 空间关系 | ✅ 极点配置示意、频域特性 | 概念定义 |
+
+**简化判断**：
+```
+文字说不清楚 → 加图
+一句话能懂 → 不加图
+```
+
+---
+
+### 二、图片类型选择
+
+| 类型 | 适用场景 | 工具推荐 |
+|------|----------|----------|
+| 系统框图 | LADRC整体结构、信号流向 | Draw.io / Visio / Mermaid |
+| 流程图 | 参数调节流程、初始化流程 | Mermaid / Draw.io |
+| 对比图 | PID vs LADRC、并联对比 | Draw.io |
+| 响应曲线 | 阶跃响应、扰动响应、频域特性 | MATLAB / Python (Matplotlib) |
+
+---
+
+### 三、图片获取/生成方式
+
+**方式1：现有资源**
+- B站视频截图 → 保存到 `docs/zh/ControlTheory/Pictures/`
+- CSDN原文配图 → 保留来源标注
+
+**方式2：代码生成**
+```python
+# Python/MATplotlib 生成响应曲线
+import matplotlib.pyplot as plt
+plt.figure()
+plt.step(t, y_ladrc, label='LADRC')
+plt.step(t, y_pid, label='PID')
+plt.legend()
+plt.savefig('Pictures/ladrc_vs_pid_step.png')
+```
+
+**方式3：Mermaid绘制**
+```mermaid
+graph LR
+    TD[跟踪微分器] --> ESO[扩张状态观测器]
+    ESO --> LSEF[线性误差反馈]
+    LSEF --> u[控制输出]
+```
+
+---
+
+### 四、完整工作流
+
+```
+Step 1: 标记位置
+    └── 在文档中标记 [需要图片]
+
+Step 2: 判断来源
+    └── 已有资源？ → 有就用，没有就生成
+
+Step 3: 选择方式
+    └── 曲线图 → MATLAB/Python
+    └── 框图 → Draw.io
+    └── 流程图 → Mermaid
+
+Step 4: 制作图片
+    └── 命名规范：XX-描述-类型.png
+    └── 保存到 Pictures/ 目录
+
+Step 5: 插入文档
+    └── ![描述](Pictures/xx-xxx.png)
+```
+
+---
+
+### 五、图片命名规范
+
+```
+格式：XX-描述-类型.png
+示例：
+├── 01-ladrc-structure.png      # LADRC系统框图
+├── 02-pid-vs-ladrc.png         # PID vs LADRC对比
+├── 03-td-flowchart.png         # TD流程图
+├── 04-eso-block.png            # ESO模块图
+├── 05-step-response.png        # 阶跃响应曲线
+└── 06-bode-plot.png            # Bode图
+```
+
+---
+
+### 六、常用工具
+
+| 工具 | 用途 | 链接 |
+|------|------|------|
+| Draw.io | 绘制框图、流程图 | draw.io |
+| Mermaid | 文本生成流程图 | mermaid.live |
+| Python/Matplotlib | 生成曲线图 | matplotlib.org |
+| QuickTime(Win:Snip) | 截图工具 | 系统自带 |
 
 ---
 
