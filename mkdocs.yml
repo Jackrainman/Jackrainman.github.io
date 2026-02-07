@@ -136,3 +136,6 @@ nav:
           - 参考资料:
               - CSDN笔记存档: zh/ControlTheory/CSDN.md
               - 项目规划: zh/ControlTheory/PROJECT-PLAN.md
+              - 废弃文档:
+                  - 何谓自抗扰（旧版）: zh/ControlTheory/废弃文档/何谓自抗扰.md
+                  - LADRC已废除文档: zh/ControlTheory/废弃文档/LADRC_已废除，请勿查看.md
