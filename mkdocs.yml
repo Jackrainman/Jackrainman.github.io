@@ -122,18 +122,17 @@ nav:
           - CAN报文列表: zh/CAN/CAN_List.md
           - CAN报文代码: zh/CAN/CAN_List代码.md
       - 控制论:
-          - 基础铺垫:
-              - 控制理论基础: zh/ControlTheory/Control-Theory-Fundamentals.md
+          - 基础篇:
               - PID控制: zh/ControlTheory/PID-Control.md
-          - LADRC核心概念:
+              - 控制理论基础: zh/ControlTheory/Control-Theory-Fundamentals.md
+          - 进阶篇:
               - 何谓自抗扰: zh/ControlTheory/01-何谓自抗扰.md
               - LADRC算法详解: zh/ControlTheory/02-LADRC算法详解.md
-          - 代码实战:
+          - 实战篇:
               - LADRC代码实战: zh/ControlTheory/03-LADRC代码实战.md
-          - 进阶拓展:
-              - 高级控制理论: zh/ControlTheory/Advanced-Control-Theory.md
-          - 战队专用:
               - LADRC战队实战指南: zh/ControlTheory/LADRC战队实战指南.md
+          - 拓展篇:
+              - 高级控制理论: zh/ControlTheory/Advanced-Control-Theory.md
           - 参考资料:
               - CSDN笔记存档: zh/ControlTheory/CSDN.md
               - 项目规划: zh/ControlTheory/PROJECT-PLAN.md
