@@ -34,7 +34,36 @@ LADRC的思路：看到偏差 → 判断是目标变了还是扰动了 → 分�
 
 补偿后，复杂系统变成简单的**积分器串联型**，控制变得超简单。
 
-![](Pictures/LADRC战队实战指南/简单说明.png)
+```mermaid
+flowchart LR
+    subgraph Disturbance["扰动源 Disturbance Sources"]
+        D1["外部干扰"]
+        D2["模型误差"]
+        D3["参数变化"]
+    end
+    TD["总扰动"]
+    LESO["LESO 扩张观测器"]
+    Controller["控制器"]
+    Sum1["相加"]
+    Plant["被控对象 Plant"]
+    Ideal["理想积分器串联型"]
+    D1 --> TD
+    D2 --> TD
+    D3 --> TD
+    TD -->|"f(t)"| LESO
+    LESO -->|"估计总扰动 f^(t)"| Sum1
+    LESO -->|"估计"| Controller
+    Controller --> Sum1
+    Sum1 -->|"u(t)"| Plant
+    Plant -->|"y(t)"| Ideal
+    Plant --> LESO
+    style Disturbance fill:#f9f9f9,stroke:#333
+    style LESO fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style Controller fill:#fff3e0,stroke:#e65100
+    style Plant fill:#f3e5f5,stroke:#4a148c
+    style Ideal fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    style TD fill:#ffebee,stroke:#b71c1c
+```
 
 而PID 的串联就可以简单理解为带追踪的积分器串联型，有时候会陷入“调参地狱”
 
