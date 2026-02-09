@@ -139,3 +139,9 @@ nav:
               - 废弃文档:
                   - 何谓自抗扰（旧版）: zh/ControlTheory/废弃文档/何谓自抗扰.md
                   - LADRC已废除文档: zh/ControlTheory/废弃文档/LADRC_已废除，请勿查看.md
+      - 底盘解算:
+          - 底盘解算: zh/Chassis/底盘解算.md
+      - 速度规划:
+          - 速度规划-理论: zh/SpeedPlan/速度规划-理论.md
+          - 速度规划-代码: zh/SpeedPlan/速度规划-代码.md
+          - TD: zh/SpeedPlan/TD.md
