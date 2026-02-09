@@ -1,0 +1,162 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{ctex}
+
+\geometry{margin=2.5cm}
+\title{\textbf{舵轮底盘运动学解算推导}}
+\author{基于 steering_wheel.c/h 代码分析}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{引言}
+舵轮底盘由多个独立的舵向轮模块组成，每个模块包含：
+\begin{itemize}
+    \item \textbf{舵向电机}：控制轮子转向角度
+    \item \textbf{航向电机}：控制轮子转动速度
+\end{itemize}
+
+舵轮底盘可实现全方位移动(omnidirectional movement)，包括平动、自转以及两者的组合。
+
+\section{系统建模}
+
+\subsection{坐标系定义}
+
+\begin{enumerate}
+    \item \textbf{世界坐标系} $\{O_w\}$：全局固定坐标系
+    \item \textbf{车身坐标系} $\{O_b\}$：固定在底盘中心的坐标系
+    \item \textbf{单个舵轮}：具有独立的转向和驱动能力
+\end{enumerate}
+
+\subsection{四轮底盘布局}
+按照代码中的定义，四轮底盘呈矩形布局，轮子到中心的距离(半径)为 $r$。
+
+\subsection{三轮底盘布局}
+三轮底盘呈等边三角形布局，各轮间隔 $120°$。
+
+\section{速度分解与合成}
+
+\subsection{平动分量}
+设车身坐标系下的目标速度为 $(V_x, V_y)$，车身相对于世界坐标系的偏航角为 $\psi$（逆时针为正）。
+
+世界坐标系下的速度通过坐标变换得到：
+\begin{equation}
+\begin{bmatrix} V_{wx} \ V_{wy} \end{bmatrix} = 
+\begin{bmatrix}
+\cos\psi & -\sin\psi \
+\sin\psi & \cos\psi
+\end{bmatrix}
+\begin{bmatrix} V_x \ V_y \end{bmatrix}
+\end{equation}
+
+代码中使用负的偏航角实现变换（line 223-226）：
+\begin{align}
+mix\_x[i] &= V_x \cos\psi + V_y \sin\psi + speed\_wx[i] \
+mix\_y[i] &= V_y \cos\psi - V_x \sin\psi + speed\_wy[i]
+\end{align}
+
+\subsection{转动分量}
+当底盘以角速度 $\omega$ 自转时，各轮产生的线速度为：
+\begin{equation}
+\vec{v}_{\omega,i} = \omega r \cdot (-\sin\alpha_i, \cos\alpha_i)
+\end{equation}
+
+其中 $\alpha_i$ 是第 $i$ 个轮子与中心连线相对于 $x$ 轴的夹角。
+
+\subsubsection{四轮底盘（line 196-204）}
+各轮位于 $\pm 45°$ 方向：
+\begin{align}
+speed\_wx &= \omega \cdot \left[\frac{\sqrt{2}}{2}, \frac{\sqrt{2}}{2}, -\frac{\sqrt{2}}{2}, -\frac{\sqrt{2}}{2}\right] \
+speed\_wy &= \omega \cdot \left[-\frac{\sqrt{2}}{2}, \frac{\sqrt{2}}{2}, -\frac{\sqrt{2}}{2}, \frac{\sqrt{2}}{2}\right]
+\end{align}
+
+\subsubsection{三轮底盘（line 250-256）}
+各轮位于 $0°, 120°, -120°$ 方向：
+\begin{align}
+speed\_wx &= \omega \cdot \left[1, -\frac{1}{2}, -\frac{1}{2}\right] \
+speed\_wy &= \omega \cdot \left[0, -\frac{\sqrt{3}}{2}, \frac{\sqrt{3}}{2}\right]
+\end{align}
+
+\subsection{速度矢量叠加}
+每个轮子的合速度（line 224-226）：
+\begin{align}
+mix\_x[i] &= V_{wx} + speed\_wx[i] \
+mix\_y[i] &= V_{wy} + speed\_wy[i]
+\end{align}
+
+\section{轮子目标状态计算}
+
+\subsection{速度大小（line 228）}
+\begin{equation}
+V_i = \sqrt{(mix\_x[i])^2 + (mix\_y[i])^2}
+\end{equation}
+
+\subsection{角度计算（line 238-240）}
+极坐标映射将角度映射到 $[-\pi, \pi]$ 范围：
+\begin{equation}
+\theta_i = \begin{cases}
+\arccos\left(\dfrac{mix\_y[i]}{V_i}\right) & \text{if } mix\_x[i] < 0 \
+-\arccos\left(\dfrac{mix\_y[i]}{V_i}\right) & \text{if } mix\_x[i] \geq 0
+\end{cases}
+\end{equation}
+
+\section{最小转角优化算法（line 121-160）}
+
+舵向电机有两个可选方向：$\theta$ 或 $\theta + \pi$（后者需反转航向电机）。
+
+\subsection{角度差计算}
+设当前角度为 $\theta_{curr}$：
+\begin{align}
+\Delta\theta_1 &= \text{remap}(\theta - \theta_{curr}) \
+\Delta\theta_2 &= \text{remap}(\theta + \pi - \theta_{curr})
+\end{align}
+
+其中重映射函数（line 106-112）将角度映射到 $[-\pi, \pi]$：
+\begin{equation}
+\text{remap}(\alpha) = \begin{cases}
+\alpha - 2\pi & \text{if } \alpha > \pi \
+\alpha + 2\pi & \text{if } \alpha < -\pi \
+\alpha & \text{otherwise}
+\end{cases}
+\end{equation}
+
+\subsection{优化选择（line 145-157）}
+\begin{equation}
+(\theta_{final}, V_{final}) = \begin{cases}
+(\theta + \pi, -V) & \text{if } |\Delta\theta_2| < |\Delta\theta_1| \
+(\theta, V) & \text{otherwise}
+\end{cases}
+\end{equation}
+
+\section{算法流程总结}
+
+\begin{enumerate}
+    \item \textbf{输入}：$(V_x, V_y, \omega)$ 和车身偏航角 $\psi$
+    \item \textbf{坐标变换}：将速度转换到世界坐标系
+    \item \textbf{分解转动}：计算自转在各轮产生的线速度
+    \item \textbf{矢量叠加}：平动与转动速度合成
+    \item \textbf{计算模值}：求各轮目标速度大小
+    \item \textbf{计算角度}：求各轮目标转向角度
+    \item \textbf{最小转角}：选择最优转向路径
+    \item \textbf{输出}：各轮目标角度和速度
+\end{enumerate}
+
+\section{关键公式汇总}
+
+\begin{align}
+&\text{坐标变换:} && V_{wx} = V_x\cos\psi - V_y\sin\psi \
+&                && V_{wy} = V_x\sin\psi + V_y\cos\psi \[8pt]
+&\text{转动线速度:} && v_\omega = \omega r \[8pt]
+&\text{速度合成:} && \vec{V} = \vec{V}_{trans} + \vec{V}_{rot} \[8pt]
+&\text{速度大小:} && V = \sqrt{V_x^2 + V_y^2} \[8pt]
+&\text{角度计算:} && \theta = \text{atan2}(V_y, V_x) \[8pt]
+&\text{角度映射:} && \text{remap}(\theta) = \text{fmod}(\theta, 2\pi) \pm 2\pi
+\end{align}
+
+\end{document}
