@@ -2,8 +2,8 @@
  * @file    chassis_planner.h
  * @author  Jackrainman
  * @brief   底盘速度规划模块 -- 实例化, 无全局变量
- * @version 3.1
- * @date    2026-02-10
+ * @version 3.3
+ * @date    2026-02-13
  *
  * 物理单位约定 (所有参数与输入输出均遵循):
  *   线速度       : mm/s
@@ -26,18 +26,8 @@ typedef enum {
     CHASSIS_INTERP_TRAPEZOID,   /**< 梯形加减速 (线性斜坡) */
     CHASSIS_INTERP_COSINE,      /**< 余弦平滑加减速 */
     CHASSIS_INTERP_SCURVE,      /**< S型曲线加减速 (带 jerk 限制) */
-    CHASSIS_INTERP_TRAJECTORY,  /**< 完整梯形轨迹规划 (含位置跟踪) */
     CHASSIS_INTERP_NUM
 } ChassisInterpType;
-
-/** 运动状态 (仅 TRAJECTORY 模式使用) */
-typedef enum {
-    CHASSIS_STATE_IDLE,          /**< 空闲 */
-    CHASSIS_STATE_ACCELERATING,  /**< 加速阶段 */
-    CHASSIS_STATE_UNIFORM,       /**< 匀速阶段 */
-    CHASSIS_STATE_DECELERATING,  /**< 减速阶段 */
-    CHASSIS_STATE_FINISHED       /**< 运动完成 */
-} ChassisMotionState;
 
 /* ======================== 配置结构体 ======================== */
 
@@ -57,9 +47,9 @@ typedef struct {
 
 /** 各轴 jerk (加加速度) 限制 -- 仅 SCURVE 模式使用 */
 typedef struct {
-    float max_jerk_x;    /**< X轴最大 jerk (mm/s^3), 0 表示不限制 */
-    float max_jerk_y;    /**< Y轴最大 jerk (mm/s^3), 0 表示不限制 */
-    float max_jerk_w;    /**< 偏航轴最大 jerk (rad/s^3), 0 表示不限制 */
+    float max_jerk_x;    /**< X轴最大 jerk (mm/s^3), 0 = 自动按 10*accel 推算 */
+    float max_jerk_y;    /**< Y轴最大 jerk (mm/s^3), 0 = 自动按 10*accel 推算 */
+    float max_jerk_w;    /**< 偏航轴最大 jerk (rad/s^3), 0 = 自动按 10*accel 推算 */
 } ChassisJerkCfg;
 
 /** 防侧翻速度向量限制参数 */
@@ -72,35 +62,50 @@ typedef struct {
 /** 规划器顶层配置 */
 typedef struct {
     ChassisInterpType interp_type;       /**< 插值策略 */
-    ChassisAccelCfg accel;               /**< 加速度限制 */
-    ChassisSpeedLimitCfg speed_limit;    /**< 最大速度限制 (所有模式生效) */
-    ChassisJerkCfg jerk;                 /**< jerk 限制 (仅 SCURVE 模式) */
+    ChassisAccelCfg accel;               /**< 加速度限制 (必填) */
+    ChassisSpeedLimitCfg speed_limit;    /**< 最大速度限制 (必填, 所有模式生效) */
+    ChassisJerkCfg jerk;                 /**< jerk 限制 (仅 SCURVE 模式, 0 = 自动按 10×accel 推算) */
     ChassisRolloverCfg rollover;         /**< 防侧翻参数 */
     bool enable_rollover_limit;          /**< 是否启用防侧翻限速 */
     uint32_t tick_rate_hz;               /**< FreeRTOS tick 频率 (通常为 1000) */
 } ChassisPlannerCfg;
 
-/* ======================== 单轴轨迹状态 ======================== */
+/* ======================== 配置辅助宏 ======================== */
 
-/** 单轴轨迹参数 (仅 TRAJECTORY 模式使用) */
+/** XY 对称加速度配置 (XY 相同, W 轴单独指定) */
+#define CHASSIS_ACCEL_SYM(xy, w) \
+    (ChassisAccelCfg){ (xy), (xy), (w) }
+
+/** XY 对称速度限制配置 */
+#define CHASSIS_SPEED_LIMIT_SYM(xy, w) \
+    (ChassisSpeedLimitCfg){ (xy), (xy), (w) }
+
+/** XY 对称 jerk 配置 (全部置 0 表示由 init 自动推算) */
+#define CHASSIS_JERK_SYM(xy, w) \
+    (ChassisJerkCfg){ (xy), (xy), (w) }
+
+/** 全轴 jerk 置零 -> init 时自动从 accel 推算 (jerk = 10 * accel) */
+#define CHASSIS_JERK_AUTO \
+    (ChassisJerkCfg){ 0.0f, 0.0f, 0.0f }
+
+/* ======================== 余弦过渡状态 ======================== */
+
+/**
+ * 余弦速度过渡状态 (每轴独立)
+ *
+ * 速度过渡公式:
+ *   v(t) = v_start + Δv × 0.5 × (1 - cos(π × t / T))
+ * 过渡时间:
+ *   T = π × |Δv| / (2 × a_max)
+ * 峰值加速度恰好等于 a_max, 起止加速度为 0.
+ */
 typedef struct {
-    float current_pos;       /**< 当前位置 (mm 或 rad) */
-    float current_speed;     /**< 当前速度 (mm/s 或 rad/s) */
-    ChassisMotionState state;/**< 运动状态 */
-
-    /* 轨迹参数 (初始化时预计算) */
-    float target_pos;        /**< 目标位置 (mm 或 rad) */
-    float start_pos;         /**< 起始位置 (mm 或 rad) */
-    float start_speed;       /**< 起始速度 (mm/s 或 rad/s), 用于非零初速重规划 */
-    float max_speed;         /**< 本段最大速度 (mm/s 或 rad/s) */
-    float max_accel;         /**< 最大加速度 (mm/s^2 或 rad/s^2) */
-    float t_accel;           /**< 加速段时长 (s) */
-    float t_uniform;         /**< 匀速段时长 (s) */
-    float t_total;           /**< 总运动时长 (s) */
-    float p_accel;           /**< 加速段距离 (mm 或 rad) */
-    float current_time;      /**< 已运行时间 (s) */
-    int direction;           /**< 运动方向 (+1 或 -1) */
-} AxisTrajectory;
+    float start_speed;      /**< 过渡起始速度 */
+    float target_speed;     /**< 过渡目标速度 */
+    float duration;         /**< 过渡总时间 T (s) */
+    float elapsed;          /**< 已运行时间 (s) */
+    bool  active;           /**< 是否正在过渡中 */
+} CosineAxisState;
 
 /* ======================== 规划器实例 ======================== */
 
@@ -128,24 +133,39 @@ typedef struct {
     uint32_t last_tick;      /**< 上次 xTaskGetTickCount() 值 */
     bool first_update;       /**< 首次更新标志 */
 
-    /* 轨迹模式状态 (其他模式不使用) */
-    AxisTrajectory traj_x;
-    AxisTrajectory traj_y;
-    AxisTrajectory traj_w;
-    float last_target_x;     /**< 用于目标变化检测 (mm 或 mm/s) */
-    float last_target_y;
-    float last_target_w;
-
-    /* 轨迹模式: 初始位置 (由 chassis_planner_set_position 设置) */
-    float init_pos_x;        /**< 初始 X 位置 (mm) */
-    float init_pos_y;        /**< 初始 Y 位置 (mm) */
-    float init_pos_w;        /**< 初始偏航角 (rad) */
+    /* 余弦模式: 每轴过渡状态 */
+    CosineAxisState cos_x;   /**< X轴余弦过渡 */
+    CosineAxisState cos_y;   /**< Y轴余弦过渡 */
+    CosineAxisState cos_w;   /**< 偏航轴余弦过渡 */
 
     /* 防侧翻状态 */
     RolloverState rollover;
 } ChassisPlannerInst;
 
 /* ======================== 公共 API ======================== */
+
+/**
+ * @brief 获取默认配置
+ *
+ * 返回一组经过验证的合理默认值, 调用者只需覆盖关心的参数.
+ * jerk 默认为 0 (CHASSIS_JERK_AUTO), init 时自动按 10 倍 accel 推算.
+ *
+ * @param type  期望的插值策略
+ * @return 填充好默认值的配置结构体
+ *
+ * 默认值:
+ *   accel       : x/y = 40 mm/s^2,  w = 20 rad/s^2
+ *   speed_limit : x/y = 5000 mm/s,  w = 10 rad/s
+ *   jerk        : 全部 0 (自动推算为 10 * accel)
+ *   rollover    : threshold=30, base=30, max=40, 默认关闭
+ *   tick_rate   : 1000 Hz
+ *
+ * 用法:
+ *   ChassisPlannerCfg cfg = chassis_planner_default_cfg(CHASSIS_INTERP_COSINE);
+ *   cfg.accel = CHASSIS_ACCEL_SYM(60.0f, 30.0f);
+ *   chassis_planner_init(&planner, &cfg);
+ */
+ChassisPlannerCfg chassis_planner_default_cfg(ChassisInterpType type);
 
 /**
  * @brief 初始化规划器实例
@@ -158,16 +178,10 @@ bool chassis_planner_init(ChassisPlannerInst *inst, const ChassisPlannerCfg *cfg
 /**
  * @brief 执行一个规划周期
  *
- * TRAPEZOID/COSINE/SCURVE 模式:
- *   target_x/y 为目标速度 (mm/s), target_w 为目标角速度 (rad/s)
- *
- * TRAJECTORY 模式:
- *   target_x/y 为目标位置 (mm), target_w 为目标角度 (rad)
- *
  * @param inst      规划器实例
- * @param target_x  目标 X (mm/s 或 mm, 取决于模式)
- * @param target_y  目标 Y (mm/s 或 mm, 取决于模式)
- * @param target_w  目标偏航 (rad/s 或 rad, 取决于模式)
+ * @param target_x  目标 vx (mm/s)
+ * @param target_y  目标 vy (mm/s)
+ * @param target_w  目标角速度 omega (rad/s)
  * @param out_vx    输出规划速度 X (mm/s)
  * @param out_vy    输出规划速度 Y (mm/s)
  * @param out_vw    输出规划角速度 (rad/s)
@@ -189,33 +203,5 @@ void chassis_planner_reset(ChassisPlannerInst *inst);
  * @param type  新的插值策略
  */
 void chassis_planner_set_interp(ChassisPlannerInst *inst, ChassisInterpType type);
-
-/**
- * @brief 设置轨迹模式的初始位置 (在 init 之后、第一次 update 之前调用)
- * @param inst   规划器实例
- * @param pos_x  初始 X 位置 (mm)
- * @param pos_y  初始 Y 位置 (mm)
- * @param pos_w  初始偏航角 (rad)
- */
-void chassis_planner_set_position(ChassisPlannerInst *inst,
-                                  float pos_x, float pos_y, float pos_w);
-
-/**
- * @brief 检查轨迹是否完成 (仅 TRAJECTORY 模式有意义)
- * @param inst  规划器实例
- * @return TRAJECTORY 模式: true 表示三轴全部完成;
- *         其他模式: 始终返回 false (速度模式无"完成"概念)
- */
-bool chassis_planner_is_finished(const ChassisPlannerInst *inst);
-
-/**
- * @brief 获取轨迹位置 (仅 TRAJECTORY 模式, 调试用)
- * @param inst   规划器实例
- * @param pos_x  输出 X 位置 (mm), 可传 NULL 跳过
- * @param pos_y  输出 Y 位置 (mm), 可传 NULL 跳过
- * @param pos_w  输出偏航角 (rad), 可传 NULL 跳过
- */
-void chassis_planner_get_pos(const ChassisPlannerInst *inst,
-                             float *pos_x, float *pos_y, float *pos_w);
 
 #endif /* CHASSIS_PLANNER_H */
