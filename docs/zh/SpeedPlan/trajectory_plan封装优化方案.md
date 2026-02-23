@@ -234,7 +234,7 @@ RobotErrorCode robot_arm_move_joints(const float *target_positions) {
 ```
 
 **同步效果**：
-```
+```c
 关节1: 距离1.0m, 原时间1.0s  → 调整后3.0s ✅
 关节2: 距离3.0m, 原时间3.0s  → 保持3.0s ✅
 关节3: 距离0.5m, 原时间0.5s  → 调整后3.0s ✅

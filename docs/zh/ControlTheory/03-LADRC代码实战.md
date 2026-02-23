@@ -976,7 +976,7 @@ int main(void)
 
 LADRC参数整定的一般流程：
 
-```
+```c
 步骤1: 确定系统阶数
     └─→ 观察被控对象：输入到输出需要几次积分
     └─→ 一阶系统（电流、简单速度）→ 使用first_order_ladrc
@@ -1058,7 +1058,7 @@ void LADRC_DebugOutput(ladrc_t *ladrc, float target, float measure)
 
 **2. 参数调整口诀**
 
-```
+```c
 响应慢 → 增wc
 有振荡 → 减wc或减b
 估计慢 → 增wo

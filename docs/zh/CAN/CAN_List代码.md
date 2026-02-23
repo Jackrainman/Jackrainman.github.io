@@ -20,7 +20,7 @@
 
 传统开发中，工程师常在中断中使用 `switch-case` 或 `if-else` 链处理不同 ID：
 
-```
+```c
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
     CAN_RxHeaderTypeDef header;
     uint8_t data[8];
@@ -87,7 +87,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
 
 下面从源文件顶部开始分析代码结构和实现逻辑。
 
-```
+```c
 #include "can_list/can_list.h"
 #include <stdlib.h>
 
@@ -213,7 +213,7 @@ static queue_msg_t send_msg_from_isr;
 
 观察 `can_list.c` 中定义的 `can_node` 结构体和 `hash_table_t`：
 
-```
+```c
 typedef struct can_node {
     void *can_data;          /*!< 节点数据指针 */
     uint32_t id;             /*!< CAN ID */
@@ -238,7 +238,7 @@ typedef struct can_node {
 #### 为什么电控系统需要掩码？
 
 在机器人电机控制中，CAN ID 通常包含多种信息：
-```
+```c
 | bit [31:24] | bit [23:16] | bit [15:8] | bit [7:0] |
 |-------------|-------------|------------|-----------|
 |   错误码    |    模式     |   保留位   |  设备 ID  |
@@ -254,7 +254,7 @@ typedef struct can_node {
 
 在 `can_list.c` 的消息处理函数中，匹配节点的逻辑如下：
 
-```
+```c
 node->id == (received_id & node->id_mask)
 ```
 
@@ -298,7 +298,7 @@ can_list_add_new_node(can1_selected, &motor1, device_id, mask, CAN_ID_EXT, motor
 
 #### 哈希表结构
 
-```
+```c
 typedef struct {
     can_node_t **table; /*!< 指向节点指针数组的指针（哈希桶）。*/
     uint32_t len;       /*!< 哈希表的大小（长度）。*/
@@ -347,7 +347,7 @@ can_list_add_can(can1_selected, table_len, table_len);
 #### 冲突处理：链表法
 
 当多个 ID 哈希到同一位置时，使用链表连接：
-```
+```c
 // 哈希冲突示例：ID 0x201 和 0x214 可能哈希到同一位置
 table[hash] → node1(0x201) → node2(0x214) → NULL
 ```
@@ -534,7 +534,7 @@ table[hash] → node1(0x201) → node2(0x214) → NULL
 
     C
 
-    ```
+    ```c
     while ((node != NULL) && (node->id) != (id & node->id_mask)) {
         node = node->next;
     }
