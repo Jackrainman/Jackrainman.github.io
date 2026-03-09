@@ -115,34 +115,20 @@ extra_css:
 
 nav:
   - Home: index.md
-  - About:
-      - About: About/index.md
-  - 电控:
-      - CAN总线:
-          - CAN总线基础: zh/CAN/CAN总线基础.md
-          - CAN报文列表: zh/CAN/CAN_List.md
-          - CAN报文代码: zh/CAN/CAN_List代码.md
-      - 控制论:
-          - 基础篇:
-              - PID控制: zh/ControlTheory/PID-Control.md
-              - 控制理论基础: zh/ControlTheory/Control-Theory-Fundamentals.md
-          - 进阶篇:
-              - 何谓自抗扰: zh/ControlTheory/01-何谓自抗扰.md
-              - LADRC算法详解: zh/ControlTheory/02-LADRC算法详解.md
-          - 实战篇:
-              - LADRC代码实战: zh/ControlTheory/03-LADRC代码实战.md
-              - LADRC战队实战指南: zh/ControlTheory/LADRC战队实战指南.md
-          - 拓展篇:
-              - 高级控制理论: zh/ControlTheory/Advanced-Control-Theory.md
-          - 参考资料:
-              - CSDN笔记存档: zh/ControlTheory/CSDN.md
-              - 项目规划: zh/ControlTheory/PROJECT-PLAN.md
-              - 废弃文档:
-                  - 何谓自抗扰（旧版）: zh/ControlTheory/废弃文档/何谓自抗扰.md
-                  - LADRC已废除文档: zh/ControlTheory/废弃文档/LADRC_已废除，请勿查看.md
-      - 底盘解算:
-          - 底盘解算: zh/Chassis/底盘解算.md
-      - 速度规划:
-          - 速度规划-理论: zh/SpeedPlan/速度规划-理论.md
-          - 速度规划-代码: zh/SpeedPlan/速度规划-代码.md
-          - TD: zh/SpeedPlan/TD.md
+  - About: zh/About/index.md
+  - 控制理论:
+      - 学习路径指南: zh/ControlTheory/00-学习路径指南.md
+      - 重新理解控制论: zh/ControlTheory/01-重新理解控制论.md
+      - 机器人控制系统的分层设计与算法选型方法: zh/ControlTheory/02-机器人控制系统的分层设计与算法选型方法.md
+      - PID控制算法原理与应用: zh/ControlTheory/03-PID控制算法原理与应用.md
+      - 控制理论基础: zh/ControlTheory/04-控制理论基础.md
+      - 何谓自抗扰: zh/ControlTheory/05-何谓自抗扰.md
+      - LADRC算法详解: zh/ControlTheory/06-LADRC算法详解.md
+      - LADRC代码实战: zh/ControlTheory/07-LADRC代码实战.md
+      - LADRC战队实战指南: zh/ControlTheory/08-LADRC战队实战指南.md
+      - 高级控制理论: zh/ControlTheory/09-高级控制理论.md
+  - 嵌入式实践:
+      - CAN总线基础: zh/CAN/CAN总线基础.md
+      - CAN报文列表: zh/CAN/CAN_List.md
+      - CAN报文代码: zh/CAN/CAN_List代码.md
+

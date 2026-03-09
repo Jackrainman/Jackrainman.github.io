@@ -414,3 +414,102 @@ img[alt="logo"] {
   background-color: #090c10 !important;
   border-top: 1px solid rgba(255,255,255,.08);
 }
+
+/* Home landing page */
+:root {
+  --jr-home-accent: #0f6bff;
+  --jr-home-accent-soft: rgba(15, 107, 255, 0.12);
+  --jr-home-surface: linear-gradient(135deg, rgba(15, 107, 255, 0.1), rgba(11, 18, 32, 0.02));
+  --jr-home-border: rgba(15, 23, 42, 0.12);
+}
+
+[data-md-color-scheme="slate"] {
+  --jr-home-accent: #8ab4ff;
+  --jr-home-accent-soft: rgba(138, 180, 255, 0.12);
+  --jr-home-surface: linear-gradient(135deg, rgba(138, 180, 255, 0.1), rgba(255, 255, 255, 0.02));
+  --jr-home-border: rgba(255, 255, 255, 0.1);
+}
+
+.landing-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  margin: 0 0 2rem;
+  border: 1px solid var(--jr-home-border);
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(circle at top right, var(--jr-home-accent-soft), transparent 34rem),
+    var(--jr-home-surface);
+}
+
+.landing-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto -3rem -3rem auto;
+  width: 12rem;
+  height: 12rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--jr-home-accent-soft), transparent 70%);
+  pointer-events: none;
+}
+
+.landing-eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--jr-home-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.landing-hero h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.1;
+}
+
+.landing-lead {
+  max-width: 46rem;
+  margin: 1rem 0 0;
+  font-size: 1.05rem;
+  line-height: 1.85;
+}
+
+.landing-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+}
+
+.landing-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--jr-home-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  font-size: 0.88rem;
+  font-weight: 600;
+  backdrop-filter: blur(12px);
+}
+
+[data-md-color-scheme="slate"] .landing-chip {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid.cards > ol > li {
+  border-radius: 1rem;
+}
+
+@media screen and (max-width: 45rem) {
+  .landing-hero {
+    padding: 1.25rem;
+    border-radius: 1rem;
+  }
+
+  .landing-lead {
+    font-size: 0.98rem;
+  }
+}

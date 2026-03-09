@@ -1,9 +1,14 @@
 /**
  * @file    chassis_calculations.h
  * @author  Jackrainman
- * @brief   侧翻抑制模块
- * @version 1.0
- * @date    2025-11-22
+ * @brief   底盘平滑速度规划模块（兼容1.0接口）
+ * @version 2.0
+ * @date    2026-03-02
+ *
+ * 说明：
+ * 1. 保留 1.0 对外 API，支持无缝替换；
+ * 2. 内核升级为实例化平滑规划（梯形/余弦/S曲线）；
+ * 3. 修复 dt 单位错误，增加 jerk 与速度限幅能力。
  */
 
 #ifndef _CHASSIS_CALCULATIONS_H_
@@ -14,11 +19,10 @@
 /**
  * @brief 速度规划类型定义
  */
-typedef enum{
-    CHASSIS_SPEED_PLAN_EASY,       /**< 简单梯形速度规划 */
-    CHASSIS_SPEED_PLAN_COSINE,     /**< 余弦速度规划 */
-    CHASSIS_SPEED_PLAN_S_CURVE,    /**< S型速度规划 */
-
+typedef enum {
+    CHASSIS_SPEED_PLAN_EASY = 0,   /**< 梯形加减速 */
+    CHASSIS_SPEED_PLAN_COSINE,     /**< 余弦平滑加减速 */
+    CHASSIS_SPEED_PLAN_S_CURVE,    /**< jerk 限制 S 曲线 */
     CHASSIS_SPEED_PLAN_NUM
 } ChassisSpeedPlanType;
 
@@ -71,52 +75,43 @@ void scurve_speed_plan_handle(float target_x, float target_y, float target_yaw);
  */
 void speed_point_limit(float *vx, float *vy);
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-function"
+/**
+ * @brief 设置控制周期 tick 频率（Hz）
+ * @param tick_freq_hz FreeRTOS tick 频率，通常为 1000
+ */
+void chassis_speed_plan_set_tick_freq(uint32_t tick_freq_hz);
 
 /**
- * @brief 获取时间差
- * @param last_tick 上次时间戳
- * @return 时间差（秒）
+ * @brief 设置三轴最大加速度
+ * @param accel_x X 轴最大加速度（mm/s^2）
+ * @param accel_y Y 轴最大加速度（mm/s^2）
+ * @param accel_w W 轴最大角加速度（rad/s^2）
  */
-static float get_time_delta(uint32_t last_tick);
+void chassis_speed_plan_set_accel(float accel_x, float accel_y, float accel_w);
 
 /**
- * @brief 计算速度差值
- * @param target 目标速度
- * @param current 当前速度
- * @return 速度差值
+ * @brief 设置三轴最大 jerk（<=0 表示自动按 10*accel 推算）
+ * @param jerk_x X 轴最大 jerk（mm/s^3）
+ * @param jerk_y Y 轴最大 jerk（mm/s^3）
+ * @param jerk_w W 轴最大 jerk（rad/s^3）
  */
-static float calculate_speed_diff(float target, float current);
+void chassis_speed_plan_set_jerk(float jerk_x, float jerk_y, float jerk_w);
 
 /**
- * @brief 更新速度值（梯形算法）
- * @param diff 速度差值
- * @param max_change 最大速度变化量
- * @param current_speed 当前速度指针
- * @param target_speed 目标速度
+ * @brief 设置三轴最大速度限制（<=0 表示不限制）
+ * @param speed_x X 轴最大速度（mm/s）
+ * @param speed_y Y 轴最大速度（mm/s）
+ * @param speed_w W 轴最大角速度（rad/s）
  */
-static void easy_calc_update_speed(float diff, float max_change, float* current_speed, float target_speed);
+void chassis_speed_plan_set_speed_limit(float speed_x, float speed_y, float speed_w);
 
 /**
- * @brief 更新速度值（使用余弦平滑算法）
- * @param diff 速度差值
- * @param max_change 最大速度变化量
- * @param current_speed 当前速度指针
- * @param target_speed 目标速度
+ * @brief 设置防侧翻速度向量限制参数
+ * @param enable 是否启用（0=关，非0=开）
+ * @param base_limit 基础限制（mm/s）
+ * @param max_limit 最大限制（mm/s）
+ * @param threshold 变化阈值（mm/s）
  */
-static void cosine_update_speed(float diff, float max_change, float* current_speed, float target_speed);
-
-/**
- * @brief 更新速度值（使用S型曲线平滑算法）
- * @param diff 速度差值
- * @param max_change 最大速度变化量
- * @param current_speed 当前速度指针
- * @param target_speed 目标速度
- */
-static void scurve_update_speed(float diff, float max_change, float* current_speed, float target_speed);
-
-/* Restore warning settings */
-#pragma GCC diagnostic pop
+void chassis_speed_plan_set_rollover(int enable, float base_limit, float max_limit, float threshold);
 
 #endif /* _CHASSIS_CALCULATIONS_H_ */
