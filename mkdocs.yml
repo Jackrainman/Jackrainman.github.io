@@ -59,6 +59,35 @@ plugins:
         remove_comments: true
       cache_safe: true
 
+exclude_docs: |
+  zh/.obsidian/**
+  zh/_Inbox/**
+  zh/_Private/**
+  zh/_Drafts/**
+  zh/_Archive/**
+  zh/00_VibeCoding/**
+  zh/2026R1/**
+  zh/培养/**
+  zh/寒假任务相关知识/**
+  zh/运营/**
+  zh/文档规范/**
+  zh/Chassis/0_底盘调试注意事项.md
+  zh/Chassis/自动跑点控制流图.md
+  zh/SpeedPlan/架构设计方案_v1.0.md
+  zh/SpeedPlan/改进说明.md
+  zh/SpeedPlan/底盘平滑模块_更新说明_v2.0.md
+  zh/SpeedPlan/trajectory_plan封装优化方案.md
+  zh/**/Legacy/**
+  zh/**/废弃文档/**
+  zh/**/*_Prompt.md
+  zh/**/chatgpt.md
+  zh/AGENTS.md
+  zh/当前任务.md
+  zh/备忘录.md
+  zh/未命名.md
+  zh/关于使用AI的一些个人规定.md
+  zh/软件工程-开学第一课感想.md
+
 extra:
   generator: false
   # --- 新增 giscus 配置 ---
@@ -127,8 +156,12 @@ nav:
       - LADRC代码实战: zh/ControlTheory/07-LADRC代码实战.md
       - LADRC战队实战指南: zh/ControlTheory/08-LADRC战队实战指南.md
       - 高级控制理论: zh/ControlTheory/09-高级控制理论.md
+      - MCU与上位机的控制分层: zh/ControlTheory/10-MCU与上位机的控制分层.md
+      - 现代控制与最优控制导论: zh/ControlTheory/11-现代控制与最优控制导论.md
+      - 智能控制与强化学习导论: zh/ControlTheory/12-智能控制与强化学习导论.md
+      - 学习路径（个人版）: zh/ControlTheory/学习路径_个人版.md
+      - 学习路径（研究总稿）: zh/ControlTheory/学习路径_研究总稿.md
   - 嵌入式实践:
       - CAN总线基础: zh/CAN/CAN总线基础.md
       - CAN报文列表: zh/CAN/CAN_List.md
       - CAN报文代码: zh/CAN/CAN_List代码.md
-

@@ -11,7 +11,7 @@ comments: true
   <h1>Jackrainman 的机器人电控与控制系统文档</h1>
   <p class="landing-lead">
     记录我在机器人电控方向的控制理论、速度规划、底盘解算、CAN 通信与嵌入式工程实践。
-    首页只展示精选内容，其余资料保留在完整文档和搜索中。
+    docs/zh 仍作为 Obsidian Vault 使用，但站点只收录适合公开发布的技术文章。
   </p>
   <div class="landing-chips">
     <span class="landing-chip">Control Theory</span>
@@ -112,5 +112,4 @@ comments: true
 
 </div>
 
-> 站点还保留培养方案、任务资料、文档规范与历史归档；这些内容不在首页推荐，但仍可通过导航和搜索访问。
-
+> 私人、草稿和归档资料保留在 `docs/zh/_Private`、`docs/zh/_Drafts`、`docs/zh/_Archive`，不会进入 Git、导航、搜索和网站构建结果。

@@ -1,2 +1,7 @@
 /site
-docs/zh/2026R1/
+.venv/
+docs/zh/.obsidian/
+docs/zh/_Inbox/
+docs/zh/_Private/
+docs/zh/_Drafts/
+docs/zh/_Archive/
