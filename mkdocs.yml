@@ -154,14 +154,39 @@ nav:
       - 何谓自抗扰: zh/ControlTheory/05-何谓自抗扰.md
       - LADRC算法详解: zh/ControlTheory/06-LADRC算法详解.md
       - LADRC代码实战: zh/ControlTheory/07-LADRC代码实战.md
-      - LADRC战队实战指南: zh/ControlTheory/08-LADRC战队实战指南.md
+      - LADRC实战指南: zh/ControlTheory/08-LADRC实战指南.md
       - 高级控制理论: zh/ControlTheory/09-高级控制理论.md
       - MCU与上位机的控制分层: zh/ControlTheory/10-MCU与上位机的控制分层.md
       - 现代控制与最优控制导论: zh/ControlTheory/11-现代控制与最优控制导论.md
       - 智能控制与强化学习导论: zh/ControlTheory/12-智能控制与强化学习导论.md
+      - PID，前馈，TD: zh/ControlTheory/PID，前馈，TD.md
+      - 自适应前馈: zh/ControlTheory/自适应前馈.md
       - 学习路径（个人版）: zh/ControlTheory/学习路径_个人版.md
       - 学习路径（研究总稿）: zh/ControlTheory/学习路径_研究总稿.md
+  - 底盘:
+      - 写在前面: zh/Chassis/01_写在前面.md
+      - 底盘正解算: zh/Chassis/底盘正解算.md
+      - 底盘解算: zh/Chassis/底盘解算.md
+      - steering_wheel与底盘全链路坐标轴约定: zh/Chassis/steering_wheel与底盘全链路坐标轴约定.md
+  - 速度规划:
+      - 速度规划-理论: zh/SpeedPlan/速度规划-理论.md
+      - 速度规划+卷积: zh/SpeedPlan/速度规划+卷积.md
+      - TD: zh/SpeedPlan/TD.md
+  - 电机:
+      - 电机驱动代码详细讲解: zh/Motor/电机驱动代码详细讲解.md
+      - 大疆驱动讲解: zh/Motor/大疆驱动讲解.md
+      - AK Motor 介绍: zh/Motor/AK-Motor/README.md
+      - AK Motor 使用指南: zh/Motor/AK-Motor/User_Guider.md
+      - DJI Motor: zh/Motor/DJI-Motor/README.md
+      - VESC: zh/Motor/VESC/README.md
   - 嵌入式实践:
       - CAN总线基础: zh/CAN/CAN总线基础.md
       - CAN报文列表: zh/CAN/CAN_List.md
       - CAN报文代码: zh/CAN/CAN_List代码.md
+      - 单片机:
+          - GPIO: zh/单片机/01_GPIO.md
+          - SWD烧录: zh/单片机/02_SWD烧录.md
+          - USART: zh/单片机/03_USART.md
+          - FLASH模拟EEPROM: zh/单片机/FLASH 模拟 EEPROM.md
+          - SPI FLASH: zh/单片机/SPI FLASH.md
+          - 学习文档: zh/单片机/学习文档.md

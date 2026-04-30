@@ -656,7 +656,7 @@ typedef struct {
  * @param beta2      ESO状态观测器增益2（速度观测带宽）
  * @param beta3      ESO状态观测器增益3（扰动观测带宽）
  * @param kp         控制器比例增益（刚度）
- * @param kd         控制器微分增益（阻尼）- 注意：LADRC中通常设为0，由b0处理
+ * @param kd         控制器微分增益（阻尼）- 注意：一阶LADRC中通常设为0，由b0处理，感谢 SYW561 勘误
  * @param b          系统增益估计值(b0) - 决定控制量的缩放比例
  * @param dt         RTOS固定采样周期(秒) - 必须与实际任务频率一致，将固化到结构体
  * @param k_aw       抗积分饱和增益（建议值1.0~3.0，0表示不启用）
