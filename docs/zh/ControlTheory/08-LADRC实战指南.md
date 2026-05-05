@@ -1,7 +1,7 @@
 # LADRC快速上手
 
-> 最近修改日期：2026-02-07
-> 参与者：Jackrainman
+> **最近修改日期**：2026-05-05
+> **参与者**：Jackrainman
 > **配套代码**：[07-LADRC代码实战.md](./07-LADRC代码实战.md)
 
 ## 一、LADRC公式与原理
@@ -368,37 +368,37 @@ LADRC 对 b₀ 精度要求不苛刻。b₀ 偏差在 ±20% 甚至更大时，LA
 flowchart LR
     %% 定义六个步骤节点，使用不同形状代表不同图标类型
     S1([步骤1: 测量对象参数]):::measure
-    S2[步骤2: 设置控制器带宽 ωc]:::setting  
+    S2[步骤2: 设置控制器带宽 ωc]:::setting
     S3[步骤3: 设置观测器带宽 ωo]:::setting
     S4[[步骤4: 调整 b 估计值]]:::adjust
     S5[[步骤5: 补偿器参数优化]]:::adjust
     S6>步骤6: 噪声抑制优化]:::adjust
-    
+
     %% 定义提示注释节点
     N1{"30%误差<br/>可接受"}:::note
     N3{"ωo = (3~5)ωc"}:::note
-    
+
     %% 主流程连接
     S1 --> S2 --> S3 --> S4 --> S5 --> S6
-    
+
     %% 提示虚线连接
     S1 -.-> N1
     S3 -.-> N3
-    
+
     %% 样式定义：三个阶段用不同配色
     classDef measure fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#0d47a1
     classDef setting fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#e65100
     classDef adjust fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
     classDef note fill:#fafafa,stroke:#616161,stroke-dasharray: 5 5,font-size:13px,color:#424242
-    
+
     %% 添加图例说明
     subgraph 图例
         direction TB
         L1([测量图标]):::measure
-        L2[设置图标]:::setting  
+        L2[设置图标]:::setting
         L3[[调整/优化图标]]:::adjust
     end
-    
+
     %% 调整图例位置（可选，某些渲染器支持）
     style S1 fill:#e3f2fd
     style S6 fill:#e8f5e9
