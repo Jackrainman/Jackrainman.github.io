@@ -26,7 +26,7 @@ comments: true
 
 ## 精选专题
 
-<div class="grid cards" markdown>
+<div class="grid cards landing-feature-grid--four" markdown>
 
 -   :material-school-outline: __控制理论__
 
@@ -36,7 +36,7 @@ comments: true
 
     [学习路径指南](ControlTheory/00-学习路径指南.md)
 
-    [LADRC 战队实战指南](ControlTheory/08-LADRC战队实战指南.md)
+    [LADRC 战队实战指南](ControlTheory/08-LADRC实战指南.md)
 
 -   :material-axis-arrow: __速度规划与底盘__
 
@@ -84,7 +84,7 @@ comments: true
 
     面向战队开发场景，强调调参顺序与工程上的可落地性。
 
-    [阅读文章](ControlTheory/08-LADRC战队实战指南.md)
+    [阅读文章](ControlTheory/08-LADRC实战指南.md)
 
 -   __速度规划-理论__
 

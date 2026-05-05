@@ -2,7 +2,7 @@ site_name: Web_of_Jackrainman
 site_description: Jackrainman 文档站
 site_url:
 repo_url:
-edit_uri: edit/main/docs/
+edit_uri: https://github.com/Jackrainman/Jackrainman.github.io/edit/main/docs/
 
 theme:
   name: material
@@ -169,24 +169,34 @@ nav:
       - 底盘解算: zh/Chassis/底盘解算.md
       - steering_wheel与底盘全链路坐标轴约定: zh/Chassis/steering_wheel与底盘全链路坐标轴约定.md
   - 速度规划:
+      - 写在前面: zh/SpeedPlan/00-写在前面.md
       - 速度规划-理论: zh/SpeedPlan/速度规划-理论.md
       - 速度规划+卷积: zh/SpeedPlan/速度规划+卷积.md
       - TD: zh/SpeedPlan/TD.md
-  - 电机:
-      - 电机驱动代码详细讲解: zh/Motor/电机驱动代码详细讲解.md
-      - 大疆驱动讲解: zh/Motor/大疆驱动讲解.md
-      - AK Motor 介绍: zh/Motor/AK-Motor/README.md
-      - AK Motor 使用指南: zh/Motor/AK-Motor/User_Guider.md
-      - DJI Motor: zh/Motor/DJI-Motor/README.md
-      - VESC: zh/Motor/VESC/README.md
-  - 嵌入式实践:
-      - CAN总线基础: zh/CAN/CAN总线基础.md
-      - CAN报文列表: zh/CAN/CAN_List.md
-      - CAN报文代码: zh/CAN/CAN_List代码.md
-      - 单片机:
-          - GPIO: zh/单片机/01_GPIO.md
-          - SWD烧录: zh/单片机/02_SWD烧录.md
-          - USART: zh/单片机/03_USART.md
-          - FLASH模拟EEPROM: zh/单片机/FLASH 模拟 EEPROM.md
-          - SPI FLASH: zh/单片机/SPI FLASH.md
-          - 学习文档: zh/单片机/学习文档.md
+  - 更多:
+      - 电机:
+          - 电机基础: zh/Motor/电机.md
+          - 电机驱动代码详细讲解: zh/Motor/电机驱动代码详细讲解.md
+          - 大疆驱动讲解: zh/Motor/大疆驱动讲解.md
+          - AK Motor 介绍: zh/Motor/AK-Motor/README.md
+          - AK Motor 使用指南: zh/Motor/AK-Motor/User_Guider.md
+          - DJI Motor: zh/Motor/DJI-Motor/README.md
+          - VESC: zh/Motor/VESC/README.md
+      - 嵌入式实践:
+          - CAN总线基础: zh/CAN/CAN总线基础.md
+          - CAN报文列表: zh/CAN/CAN_List.md
+          - CAN报文代码: zh/CAN/CAN_List代码.md
+          - FreeRTOS:
+              - 调度: zh/FreeRTOS/01_调度.md
+          - STM32CubeMX:
+              - 时钟树: zh/STM32CubeMX/02_时钟树.md
+          - 单片机:
+              - 冬季作业: zh/单片机/00_冬季作业.md
+              - 寄存器: zh/单片机/00_寄存器.md
+              - GPIO: zh/单片机/01_GPIO.md
+              - SWD烧录: zh/单片机/02_SWD烧录.md
+              - USART: zh/单片机/03_USART.md
+              - DMA: zh/单片机/08_DMA.md
+              - FLASH模拟EEPROM: zh/单片机/FLASH 模拟 EEPROM.md
+              - SPI FLASH: zh/单片机/SPI FLASH.md
+              - 学习文档: zh/单片机/学习文档.md

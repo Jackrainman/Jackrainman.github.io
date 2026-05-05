@@ -189,11 +189,11 @@ uint8_t can_list_change_callback(can_selected_t can_select, uint32_t id_type, ui
 * `3`：参数无效（`id_type` 错误）。
 * `4`：节点不存在。
 
-## 5. 数据结构
+## 5. 数据结构 {#5-数据结构}
 
 每个 CAN 外设（如 CAN1, CAN2）都有一个独立的 `can_table_t` 指针，存储在全局数组中。
 
-> **提示**：如需了解数据结构的深度解析（指针与多级结构、哈希表设计原理），请参考 [CAN_List.md](./CAN_List.md#4-数据结构设计) 第4章。
+> **提示**：如需了解数据结构的深度解析（指针与多级结构、哈希表设计原理），请参考 [CAN_List.md](./CAN_List.md#5-数据结构) 第5章。
 
 ## 6. 架构详解
 
