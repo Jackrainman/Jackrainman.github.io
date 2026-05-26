@@ -127,8 +127,8 @@ markdown_extensions:
   - pymdownx.tilde
   - mdx_truly_sane_lists
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.superfences:
@@ -199,7 +199,6 @@ nav:
           - STM32CubeMX:
               - 时钟树: zh/STM32CubeMX/02_时钟树.md
           - 单片机:
-              - 冬季作业: zh/单片机/00_冬季作业.md
               - 寄存器: zh/单片机/00_寄存器.md
               - GPIO: zh/单片机/01_GPIO.md
               - SWD烧录: zh/单片机/02_SWD烧录.md
