@@ -744,34 +744,57 @@ img[alt="logo"] {
   border-radius: 0;
   border: 1px solid var(--jr-home-border);
   background: var(--jr-home-surface-a);
-  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
+  animation: cardFadeIn 0.6s ease-out backwards;
 }
 
+.md-typeset .grid.cards > ul > li:nth-child(1),
+.md-typeset .grid.cards > ol > li:nth-child(1) { animation-delay: 0.1s; }
+.md-typeset .grid.cards > ul > li:nth-child(2),
+.md-typeset .grid.cards > ol > li:nth-child(2) { animation-delay: 0.2s; }
+.md-typeset .grid.cards > ul > li:nth-child(3),
+.md-typeset .grid.cards > ol > li:nth-child(3) { animation-delay: 0.3s; }
+.md-typeset .grid.cards > ul > li:nth-child(4),
+.md-typeset .grid.cards > ol > li:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 卡片顶部彩色条 - 不同主题不同颜色 */
 .md-typeset .grid.cards > ul > li::before,
 .md-typeset .grid.cards > ol > li::before {
   content: "";
   position: absolute;
   left: 0;
   top: 0;
-  bottom: 0;
-  width: 3px;
+  right: 0;
+  height: 3px;
   background: var(--jr-home-accent);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.25s ease;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
 }
 
 .md-typeset .grid.cards > ul > li:hover,
 .md-typeset .grid.cards > ol > li:hover {
   border-color: var(--jr-home-accent);
   background: var(--jr-home-accent-soft);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px -8px var(--jr-home-accent-glow);
 }
 
 .md-typeset .grid.cards > ul > li:hover::before,
 .md-typeset .grid.cards > ol > li:hover::before {
-  transform: scaleY(1);
+  transform: scaleX(1);
 }
 
 .md-typeset .grid.cards > ul > li > hr,
@@ -783,6 +806,27 @@ img[alt="logo"] {
 /* card heading icon spacing */
 .md-typeset .grid.cards strong {
   color: var(--jr-home-accent);
+  transition: color 0.2s ease;
+}
+
+.md-typeset .grid.cards > ul > li:hover strong,
+.md-typeset .grid.cards > ol > li:hover strong {
+  color: var(--jr-home-accent);
+  filter: brightness(1.2);
+}
+
+/* 卡片链接样式增强 */
+.md-typeset .grid.cards a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.md-typeset .grid.cards a:hover {
+  border-bottom-color: var(--jr-home-accent);
 }
 
 /* ---------- Tip callout ---------- */
