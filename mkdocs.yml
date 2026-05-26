@@ -113,6 +113,8 @@ markdown_extensions:
   - pymdownx.betterem
   - pymdownx.highlight:
       anchor_linenums: true
+      linenums: true
+      linenums_style: pymdownx.inline
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - attr_list
