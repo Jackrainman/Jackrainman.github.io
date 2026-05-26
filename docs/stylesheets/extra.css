@@ -181,12 +181,12 @@ img[alt="logo"] {
 
 /* --- Sidebar: IDE vertical dividers --- */
 [data-md-color-scheme="slate"] .md-sidebar--primary {
-  background-color: #090c10;
-  border-right: 1px solid rgba(255,255,255,.08);
+  background-color: transparent;
+  border-right: none;
 }
 [data-md-color-scheme="slate"] .md-sidebar--secondary {
-  background-color: #0d1117;
-  border-left: 1px solid rgba(255,255,255,.08);
+  background-color: transparent;
+  border-left: none;
 }
 
 /* --- Main content background --- */

@@ -52,11 +52,6 @@ comments: false
   </div>
 </div>
 
-<div class="landing-section-label">
-  <span class="landing-section-index">/* 01 */</span>
-  <span class="landing-section-name">Core Stack</span>
-</div>
-
 ## 核心知识体系
 
 构建机器人底层控制的基石，建议按顺序或按需查阅。
@@ -97,11 +92,6 @@ comments: false
 
     [:material-arrow-right: 学习路径指南](zh/ControlTheory/00-学习路径指南.md)
 
-</div>
-
-<div class="landing-section-label">
-  <span class="landing-section-index">/* 02 */</span>
-  <span class="landing-section-name">Deep Dives</span>
 </div>
 
 ## 实战与进阶指南
